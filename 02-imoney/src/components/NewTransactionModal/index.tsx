@@ -6,8 +6,7 @@ import closeImg from '../../assets/close.svg'
 import incomeImg from '../../assets/income.svg';
 import outcomeImg from '../../assets/outcome.svg';
 import { useState } from 'react';
-
-import { api } from "../../services/api";
+import { useTransactions } from '../../hooks/useTransactions';
 
 interface NewTransactionModalProps {
     isNewTransactionModalOpen: boolean,
@@ -17,20 +16,27 @@ interface NewTransactionModalProps {
 export function NewTransactionModal( 
     {isNewTransactionModalOpen, onCloseNewTransactionModal}: NewTransactionModalProps
 ){
-    const [ transactionType, setTransactionType ] = useState('')
+    const { createTransaction } = useTransactions()
+
+    const [ type, setType ] = useState('')
     const [ description, setDescription ] = useState('')
     const [ value, setValue ] = useState(0)
     const [ category, setCategory ] = useState('')
 
-    function handleCreateNewTransaction(event: React.FormEvent<HTMLFormElement>){
+    async function handleCreateNewTransaction(event: React.FormEvent<HTMLFormElement>){
         event.preventDefault()
-        api.post('/transactions', transaction)
+        await createTransaction(transaction)
+        setType('')
+        setDescription('')
+        setValue(0)
+        setCategory('')
+        onCloseNewTransactionModal();
     }
 
     const transaction = {
         description: description,
         value: value,
-        transactionType: transactionType,
+        type: type,
         category: category
     }
     
@@ -66,8 +72,8 @@ export function NewTransactionModal(
                 <TransactionTypeContainer>
                     <RadioBoxButton 
                         type='button' 
-                        onClick={() => setTransactionType('deposit')}
-                        isActive = {transactionType === 'deposit'} //Styled Components também permite passar propriedades para o componente.
+                        onClick={() => setType('deposit')}
+                        isActive = {type === 'deposit'} //Styled Components também permite passar propriedades para o componente.
                         activeColor='activedGreen'
                     >
                         <img src={incomeImg} alt='Entrada'/>
@@ -75,8 +81,8 @@ export function NewTransactionModal(
                     </RadioBoxButton>
                     <RadioBoxButton 
                         type='button'
-                        onClick={() => setTransactionType('withdraw')}
-                        isActive={transactionType === 'withdraw'}
+                        onClick={() => setType('withdraw')}
+                        isActive={type === 'withdraw'}
                         activeColor='activedRed'
                     >
                         <img src={outcomeImg} alt='Saída'/>

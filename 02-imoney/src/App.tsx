@@ -5,6 +5,7 @@ import { GlobalStyle } from "./styles/global";
 import Modal from 'react-modal'
 import { useState } from "react";
 import { NewTransactionModal } from "./components/NewTransactionModal";
+import { TransactionsProvider } from "./hooks/useTransactions";
 
 Modal.setAppElement('#root') //Define-se por questão de acessibilidade, informando que a <div id='root'> não está visível na questão acessibilidade, ou seja, a pessoa que está utilizando acessibilidade não conseguirá interagir com o conteúdo da <div id='root'>.
 
@@ -20,14 +21,14 @@ export function App() {
   }
   
   return (
-    <>
+    <TransactionsProvider>
       <Header onOpenNewTransactionModal={handleOpenNewTransactionModal}/>
       <Dashborad/>
       <NewTransactionModal
-        isNewTransactionModalOpen={isNewTransactionModalOpen}
-        onCloseNewTransactionModal={handleCloseNewTransactionModal}
+      isNewTransactionModalOpen={isNewTransactionModalOpen}
+      onCloseNewTransactionModal={handleCloseNewTransactionModal}
       />
       <GlobalStyle/>
-    </>
+    </TransactionsProvider>
   );
 }

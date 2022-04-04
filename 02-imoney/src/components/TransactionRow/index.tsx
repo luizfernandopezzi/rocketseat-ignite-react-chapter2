@@ -1,11 +1,11 @@
 interface TransactionRowProps {
     transaction: {
-    id: number,
-    description: string,
-    value: number,
-    type: string,
-    category: string,
-    createdAt: string
+        id: number,
+        description: string,
+        value: number,
+        type: string,
+        category: string,
+        createdAt: string
     }
 }
 
